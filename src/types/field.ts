@@ -45,13 +45,15 @@ export type FieldProps<FieldValueType> = {
   disabled?: boolean;
   labelRenderer?: (label: string) => ReactNode;
   hideLabel?: boolean;
+  labelPlacement?: "before" | "after";
   "data-test-id"?: string;
 };
 
-export type EditableFieldProps<FieldValueType> = Omit<
+export type EditableFieldProps<FieldValueType, CustomFieldProps> = Omit<
   FieldProps<FieldValueType>,
   "onChange" | "value"
->;
+> &
+  CustomFieldProps;
 
 /**
  * A field component is a function that takes the props and meta and returns a JSX element.

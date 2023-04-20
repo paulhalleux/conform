@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks,react-hooks/exhaustive-deps */
-import _ from "lodash";
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 
-import { useFormContext } from "../../context/FormContext";
+import { useRegisterField } from "../../hooks/useRegisterField";
 import {
   ConformFieldOptions,
   EditableFieldProps,
   FieldComponent,
-  FieldValue,
 } from "../../types/field";
 
 /**
@@ -20,57 +18,38 @@ const ConformField =
     Component: FieldComponent<FieldValueType, CustomFieldProps>,
     options?: ConformFieldOptions
   ) =>
-  (props: EditableFieldProps<FieldValueType> & CustomFieldProps) => {
-    const formContext = useFormContext();
+  (props: EditableFieldProps<FieldValueType, CustomFieldProps>) => {
+    const { labelPlacement = "before" } = props;
+    const { fieldProps } = useRegisterField(props, typeof Component);
 
-    useEffect(
-      () =>
-        formContext.fields.registerField(props.name, {
-          name: props.name,
-          touched: false,
-          path: props.path ?? props.name,
-          error: null,
-          type: typeof Component,
-        }),
-      []
+    const showLabel = useMemo(
+      () => props.label && !props.hideLabel && !options?.hideDefaultLabel,
+      [props]
     );
 
-    const fieldValue = _.get(formContext.value, props.path ?? props.name);
-    const onFieldChange = (value: FieldValue<FieldValueType>) => {
-      const newValue = _.set(
-        formContext.value,
-        props.path ?? props.name,
-        value
-      );
-      formContext.onChange(newValue);
-    };
-
-    const showLabel =
-      props.label && !props.hideLabel && !options?.hideDefaultLabel;
     const WrapperComponent = !showLabel ? React.Fragment : "div";
-    const fieldProps = _.omit(props, [
-      "path",
-    ]) as EditableFieldProps<FieldValueType> & CustomFieldProps;
+    const FieldComponent = useMemo(
+      () => <Component data-field={props.name} {...fieldProps} />,
+      [fieldProps]
+    );
+    const LabelComponent = useMemo(
+      () =>
+        showLabel &&
+        (props.labelRenderer ? (
+          props.labelRenderer(props.label!)
+        ) : (
+          <label htmlFor={props.id ?? props.name} data-field-label={props.name}>
+            {props.label} {props.required && !props.hideRequired && "*"}
+          </label>
+        )),
+      [props]
+    );
 
     return (
       <WrapperComponent>
-        {showLabel &&
-          (props.labelRenderer ? (
-            props.labelRenderer(props.label!)
-          ) : (
-            <label
-              htmlFor={props.id ?? props.name}
-              data-field-label={props.name}
-            >
-              {props.label} {props.required && !props.hideRequired && "*"}
-            </label>
-          ))}
-        <Component
-          {...fieldProps}
-          data-field={props.name}
-          onChange={(value: FieldValue<FieldValueType>) => onFieldChange(value)}
-          value={fieldValue}
-        />
+        {labelPlacement === "before" && LabelComponent}
+        {FieldComponent}
+        {labelPlacement === "after" && LabelComponent}
       </WrapperComponent>
     );
   };

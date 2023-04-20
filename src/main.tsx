@@ -16,6 +16,7 @@ const App = () => {
         path="meta.major"
         type="checkbox"
         data-test-id={"major-checkbox"}
+        labelPlacement="after"
       />
       <pre>
         <code>{JSON.stringify(latestValue, null, 2)}</code>
