@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-import { FormProvider } from "../../context/FormContext";
+import { FormProvider } from "../../contexts/FormContext";
 import { useForm } from "../../hooks/useForm";
 import { FormRef } from "../../types/form";
 

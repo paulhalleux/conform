@@ -9,7 +9,7 @@ import {
 } from "../../types/field";
 
 /**
- * A HOC that wraps a field component and registers it to the form context.
+ * A HOC that wraps a field component and registers it to the form contexts.
  * @param Component - The field component to wrap
  * @param options - The options of the field
  */

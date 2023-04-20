@@ -11,8 +11,8 @@ export const FormContext = createContext<FormContextType>(
 export const FormProvider = FormContext.Provider;
 
 /**
- * A hook that returns the form context.
- * @returns The form context
+ * A hook that returns the form contexts.
+ * @returns The form contexts
  * @throws An error if the hook is used outside a `FormProvider` component
  */
 export function useFormContext() {
