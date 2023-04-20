@@ -1,0 +1,42 @@
+{
+  "extends": [
+    "react-app"
+  ],
+  "plugins": [
+    "simple-import-sort"
+  ],
+  "rules": {
+    "simple-import-sort/imports": "warn",
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "array-element-newline": [
+      "warn",
+      "consistent"
+    ],
+    "no-trailing-spaces": "warn",
+    "react/jsx-tag-spacing": [
+      "warn",
+      {
+        "beforeSelfClosing": "always"
+      }
+    ],
+    "react/jsx-wrap-multilines": [
+      "warn",
+      {
+        "declaration": "parens-new-line",
+        "assignment": "parens-new-line",
+        "return": "parens-new-line",
+        "arrow": "parens-new-line",
+        "condition": "parens-new-line",
+        "logical": "parens-new-line",
+        "prop": "parens-new-line"
+      }
+    ],
+    "object-shorthand": [
+      "warn",
+      "always"
+    ]
+  }
+}
