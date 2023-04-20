@@ -1,4 +1,5 @@
-import React, { HTMLProps } from "react";
+import _ from "lodash";
+import React, { HTMLProps, useMemo } from "react";
 
 import { FieldProps, FieldValue } from "../../../types/field";
 import { ConformField } from "../../ConformField";
@@ -29,16 +30,24 @@ const NativeField = ConformField<NativeFieldValueType, NativeFieldProps>(
       }
     };
 
-    if (value === undefined) {
-      onChange(defaultValue ?? (type === "checkbox" ? false : ""));
-    }
+    const fieldProps = useMemo(
+      () =>
+        _.omit(props, [
+          "hideLabel",
+          "hideRequired",
+          "labelRenderer",
+          "labelPlacement",
+          "path",
+        ]),
+      [props]
+    );
 
     return (
       <input
         type={type}
         onChange={onFieldChange}
         {...getDefaultValue(type, value, defaultValue)}
-        {...props}
+        {...fieldProps}
       />
     );
   }

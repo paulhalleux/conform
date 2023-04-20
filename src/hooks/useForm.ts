@@ -5,12 +5,8 @@ import { useFields } from "./useFields";
 /**
  * A hook that provides a form state and methods to update the form.
  * @param defaultValue The default value of the form.
- * @param onValueChange The function that is called when the value of the form changes.
  */
-export function useForm<FormValueType>(
-  defaultValue?: Partial<FormValueType>,
-  onValueChange?: (value: FormValueType) => void
-) {
+export function useForm<FormValueType>(defaultValue?: Partial<FormValueType>) {
   const fields = useFields();
   const [value, setValue] = useState<Partial<FormValueType>>(
     defaultValue || {}
@@ -21,16 +17,9 @@ export function useForm<FormValueType>(
    * @param value The value of the form. This value is merged with the current value of the form.
    * @returns void
    */
-  const onChange = useCallback(
-    (value: Partial<FormValueType>) => {
-      setValue((prevForm) => {
-        const newForm = { ...prevForm, ...value };
-        onValueChange?.(newForm as FormValueType);
-        return newForm;
-      });
-    },
-    [onValueChange]
-  );
+  const onChange = useCallback((value: Partial<FormValueType>) => {
+    setValue((prevForm) => ({ ...prevForm, ...value }));
+  }, []);
 
   /**
    * Sets the value of a field.

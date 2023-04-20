@@ -3,7 +3,6 @@ import React, {
   ForwardedRef,
   forwardRef,
   PropsWithChildren,
-  useEffect,
   useImperativeHandle,
 } from "react";
 
@@ -23,7 +22,6 @@ type FormProps<FormValueType> = PropsWithChildren<{
     value: FormValueType,
     event: React.FormEvent<HTMLFormElement>
   ) => void;
-  onValueChange?: (value: FormValueType) => void;
   defaultValue?: Partial<FormValueType>;
   noValidate?: boolean;
 }>;
@@ -34,15 +32,10 @@ type FormProps<FormValueType> = PropsWithChildren<{
  */
 const Form = forwardRef(
   <FormValueType,>(
-    {
-      children,
-      defaultValue,
-      onSubmit,
-      onValueChange,
-    }: FormProps<FormValueType>,
+    { children, defaultValue, onSubmit }: FormProps<FormValueType>,
     ref: ForwardedRef<FormRef<FormValueType>>
   ) => {
-    const form = useForm(defaultValue, onValueChange);
+    const form = useForm(defaultValue);
 
     /**
      * Handles the form submission.
@@ -69,13 +62,8 @@ const Form = forwardRef(
         fields: form.fields,
         value: (form.value as FormValueType) ?? ({} as FormValueType),
       }),
-      [form.setFieldValue, form.resetForm, form.fields, form.value]
+      [form]
     );
-
-    // Initial value change callback call
-    useEffect(() => {
-      onValueChange?.(form.value as FormValueType);
-    }, []);
 
     return (
       <FormProvider value={form}>

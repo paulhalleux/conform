@@ -3,9 +3,9 @@ import { NativeField } from "./Native";
 import { StringField } from "./String";
 
 const Field = {
+  Native: NativeField,
   String: StringField,
   Date: DateField,
-  Native: NativeField,
 };
 
 export { Field };
