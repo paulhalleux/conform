@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks,react-hooks/exhaustive-deps */
-import React, { useMemo } from "react";
+import clsx from "clsx";
+import React, { PropsWithChildren, useMemo } from "react";
 
 import { useRegisterField } from "../../hooks/useRegisterField";
 import {
@@ -7,6 +8,7 @@ import {
   EditableFieldProps,
   FieldComponent,
 } from "../../types/field";
+import { Validation } from "../Validation/Validation";
 
 /**
  * A HOC that wraps a field component and registers it to the form contexts.
@@ -19,15 +21,20 @@ const ConformField =
     options?: ConformFieldOptions
   ) =>
   (props: EditableFieldProps<FieldValueType, CustomFieldProps>) => {
-    const { labelPlacement = "before" } = props;
-    const { fieldProps } = useRegisterField(props, typeof Component);
+    const {
+      labelPlacement = "before",
+      singleError,
+      hideError,
+      errorRenderer,
+    } = props;
+    const { fieldProps, field } = useRegisterField(props, typeof Component);
 
     const showLabel = useMemo(
       () => props.label && !props.hideLabel && !options?.hideDefaultLabel,
       [props]
     );
 
-    const WrapperComponent = !showLabel ? React.Fragment : "div";
+    const WrapperComponent = !showLabel ? React.Fragment : Wrapper;
     const FieldComponent = useMemo(
       () => <Component data-field={props.name} {...fieldProps} />,
       [fieldProps]
@@ -38,7 +45,11 @@ const ConformField =
         (props.labelRenderer ? (
           props.labelRenderer(props.label!)
         ) : (
-          <label htmlFor={props.id ?? props.name} data-field-label={props.name}>
+          <label
+            htmlFor={props.id ?? props.name}
+            data-field-label={props.name}
+            className="conform-field-label"
+          >
             {props.label} {props.required && !props.hideRequired && "*"}
           </label>
         )),
@@ -46,12 +57,30 @@ const ConformField =
     );
 
     return (
-      <WrapperComponent>
+      <WrapperComponent
+        className={field?.errors?.[0]?.message ? "error" : undefined}
+      >
         {labelPlacement === "before" && LabelComponent}
-        {FieldComponent}
+        <div className="conform-field-input-wrapper">{FieldComponent}</div>
         {labelPlacement === "after" && LabelComponent}
+        {!hideError && (
+          <Validation
+            field={field}
+            singleError={singleError}
+            errorRenderer={errorRenderer}
+          />
+        )}
       </WrapperComponent>
     );
   };
+
+const Wrapper = ({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) => {
+  return (
+    <div className={clsx("conform-field-wrapper", className)}>{children}</div>
+  );
+};
 
 export { ConformField };

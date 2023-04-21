@@ -14,5 +14,5 @@ export type FormRef<FormValueType> = {
   ) => void;
   resetForm: () => void;
   fields: ReturnType<typeof useFields>;
-  value: FormValueType;
+  value: Partial<FormValueType>;
 };

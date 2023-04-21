@@ -5,10 +5,12 @@ import React, {
   PropsWithChildren,
   useImperativeHandle,
 } from "react";
+import { z } from "zod";
 
 import { FormProvider } from "../../contexts/FormContext";
 import { useForm } from "../../hooks/useForm";
 import { FormRef } from "../../types/form";
+import { ValidationError } from "../../types/validation";
 
 /**
  * The props of the form component.
@@ -17,13 +19,17 @@ import { FormRef } from "../../types/form";
  * @param defaultValue - The default value of the form (partial or complete value of type `FormValueType`)
  * @param noValidate - Whether the form should not be validated
  */
-type FormProps<FormValueType> = PropsWithChildren<{
+export type FormProps<FormValueType> = PropsWithChildren<{
   onSubmit?: (
     value: FormValueType,
     event: React.FormEvent<HTMLFormElement>
   ) => void;
+  onChange?: (value: Partial<FormValueType>) => void;
+  onValid?: () => void;
+  onInvalid?: (errors: ValidationError[]) => void;
   defaultValue?: Partial<FormValueType>;
-  noValidate?: boolean;
+  schema?: z.ZodSchema<FormValueType>;
+  className?: string;
 }>;
 
 /**
@@ -32,10 +38,11 @@ type FormProps<FormValueType> = PropsWithChildren<{
  */
 const Form = forwardRef(
   <FormValueType,>(
-    { children, defaultValue, onSubmit }: FormProps<FormValueType>,
+    props: FormProps<FormValueType>,
     ref: ForwardedRef<FormRef<FormValueType>>
   ) => {
-    const form = useForm(defaultValue);
+    const { onSubmit, children, className } = props;
+    const form = useForm(props);
 
     /**
      * Handles the form submission.
@@ -60,14 +67,19 @@ const Form = forwardRef(
         setFieldValue: form.setFieldValue,
         resetForm: form.resetForm,
         fields: form.fields,
-        value: (form.value as FormValueType) ?? ({} as FormValueType),
+        value: form.value,
       }),
       [form]
     );
 
     return (
       <FormProvider value={form}>
-        <form onSubmit={onFormSubmit} noValidate autoComplete="off">
+        <form
+          className={className}
+          onSubmit={onFormSubmit}
+          noValidate
+          autoComplete="off"
+        >
           {children}
         </form>
       </FormProvider>

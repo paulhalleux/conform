@@ -1,0 +1,45 @@
+.conform-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.conform-field-wrapper.error .conform-field-input-wrapper input[type='text'] {
+  border: 1px solid #bd0000;
+  background-color: #fdecec;
+  outline-color: rgba(189, 0, 0, .2);
+  transition: none;
+}
+
+.conform-field-validation-error {
+  font-size: 12px;
+  color: #bd0000;
+  margin-top: 4px;
+}
+
+.conform-field-label {
+  font-size: 12px;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.conform-field-input-wrapper input[type='text'] {
+  height: 28px;
+  font-size: 12px;
+  padding: 0 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color .2s ease-in-out;
+  width: 100%;
+}
+
+.conform-field-input-wrapper input[type='text']:hover {
+  border-color: #a4a4a4;
+}
+
+.conform-field-input-wrapper input[type='text']:focus {
+  border: 1px solid #003DFF;
+  outline: 2px solid rgba(0, 61, 255, .2);
+  transition: none;
+}

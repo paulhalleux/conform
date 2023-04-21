@@ -23,12 +23,12 @@ export function useRegisterField<FieldValueType, CustomFieldProps>(
       formContext.fields.registerField(props.name, {
         name: props.name,
         touched: false,
-        path: props.path ?? props.name,
-        error: null,
+        errors: null,
         type: fieldType,
+        noValidate: props.noValidate ?? false,
       }),
-    [props.name, props.path]
+    [fieldType, props.name, props.noValidate]
   );
 
-  return { fieldProps };
+  return { fieldProps, field: formContext.fields.getField(props.name) };
 }

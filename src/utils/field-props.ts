@@ -10,18 +10,27 @@ import { EditableFieldProps } from "../types/field";
 export function buildFieldProps<FieldValueType, CustomFieldProps>(
   props: EditableFieldProps<FieldValueType, CustomFieldProps>
 ) {
-  // avoid exposing the path prop to the field
-  let fieldProps = _.omit(props, ["path"]) as EditableFieldProps<
-    FieldValueType,
-    CustomFieldProps
-  >;
-
-  if (!fieldProps.id) {
-    fieldProps = {
-      ...fieldProps,
+  if (!props.id) {
+    props = {
+      ...props,
       id: props.name,
     };
   }
 
-  return fieldProps;
+  return props;
+}
+
+/**
+ * Omit the props that are not meant to be passed to the html field.
+ * @param props The props of the field.
+ */
+export function omitNonHtmlProps<FieldValueType, CustomFieldProps>(
+  props: EditableFieldProps<FieldValueType, CustomFieldProps>
+) {
+  return _.omit(props, [
+    "hideLabel",
+    "hideRequired",
+    "labelRenderer",
+    "labelPlacement",
+  ]);
 }

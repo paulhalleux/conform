@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { ValidationError } from "./validation";
+
 /**
  * The metadata of a field.
  * @property error The error message of the field.
@@ -8,9 +10,9 @@ import { ReactNode } from "react";
 export type FieldMeta = {
   type: string;
   name: string;
-  error: string | null;
+  errors: ValidationError[] | null;
   touched: boolean;
-  path: string;
+  noValidate: boolean;
 };
 
 /**
@@ -32,11 +34,13 @@ export type FieldValue<Type> = Type | null;
  * @property disabled Whether the field is disabled.
  * @property labelRenderer The function that is called to render the label.
  * @property path The path of the field.
+ * @property hideLabel Whether the label should be hidden.
+ * @property labelPlacement Whether the label should be placed before or after the field.
+ * @property data-test-id The data-test-id of the field.
  */
 export type FieldProps<FieldValueType> = {
   id?: string;
   name: string;
-  path?: string;
   onChange: (value: FieldValue<FieldValueType>) => void;
   value: FieldValue<FieldValueType>;
   label?: string;
@@ -47,8 +51,25 @@ export type FieldProps<FieldValueType> = {
   hideLabel?: boolean;
   labelPlacement?: "before" | "after";
   "data-test-id"?: string;
+} & FieldValidationProps;
+
+/**
+ * The props that are used to define the validation rules of a field.
+ * @property singleError Whether only a single error should be shown.
+ * @property errorRenderer The function that is called to render the error.
+ * @property hideError Whether the error should be hidden.
+ */
+export type FieldValidationProps = {
+  singleError?: boolean;
+  errorRenderer?: (error: string) => ReactNode;
+  hideError?: boolean;
+  noValidate?: boolean;
 };
 
+/**
+ * The props that are passed to a field and editable by the user.
+ * @template FieldValueType The type of the field value.
+ */
 export type EditableFieldProps<FieldValueType, CustomFieldProps> = Omit<
   FieldProps<FieldValueType>,
   "onChange" | "value"

@@ -1,15 +1,26 @@
 import { useCallback, useState } from "react";
 
+import { FormProps } from "../components/Form/Form";
 import { useFields } from "./useFields";
+import { useFormValidation } from "./useFormValidation";
 
 /**
  * A hook that provides a form state and methods to update the form.
- * @param defaultValue The default value of the form.
+ * @param props The props of the form.
  */
-export function useForm<FormValueType>(defaultValue?: Partial<FormValueType>) {
+export function useForm<FormValueType>(props: FormProps<FormValueType>) {
+  const {
+    defaultValue,
+    schema,
+    onChange: onFieldChange,
+    onInvalid,
+    onValid,
+  } = props;
+
   const fields = useFields();
+  const validation = useFormValidation(fields, schema, onValid, onInvalid);
   const [value, setValue] = useState<Partial<FormValueType>>(
-    defaultValue || {}
+    defaultValue ? { ...defaultValue } : {}
   );
 
   /**
@@ -17,9 +28,15 @@ export function useForm<FormValueType>(defaultValue?: Partial<FormValueType>) {
    * @param value The value of the form. This value is merged with the current value of the form.
    * @returns void
    */
-  const onChange = useCallback((value: Partial<FormValueType>) => {
-    setValue((prevForm) => ({ ...prevForm, ...value }));
-  }, []);
+  const onChange = useCallback(
+    (partial: Partial<FormValueType>) => {
+      const newForm = { ...value, ...partial };
+      setValue(newForm);
+      onFieldChange?.(newForm);
+      validation.validate(newForm);
+    },
+    [onFieldChange, validation, value]
+  );
 
   /**
    * Sets the value of a field.
@@ -44,7 +61,7 @@ export function useForm<FormValueType>(defaultValue?: Partial<FormValueType>) {
    * @returns void
    */
   const resetForm = useCallback(() => {
-    setValue(defaultValue || {});
+    setValue(defaultValue ? { ...defaultValue } : {});
   }, [defaultValue]);
 
   return {
@@ -53,5 +70,7 @@ export function useForm<FormValueType>(defaultValue?: Partial<FormValueType>) {
     setFieldValue,
     resetForm,
     fields,
+    schema,
+    validation,
   };
 }

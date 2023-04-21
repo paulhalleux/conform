@@ -1,20 +1,21 @@
+import "./styles/default.css";
+import "./index.css";
+
 import React from "react";
+import z from "zod";
 
 import { Field, Form } from "./components";
 
+const Schema = z.object({
+  names: z.array(z.string().min(3).max(10).includes("a")),
+});
+
 export function App() {
   return (
-    <Form defaultValue={{ name: "Kevin" }}>
-      <Field.String label="Name" name="name" />
-      <Field.Date label="Date" name="birthdate" path="meta.birthdate" />
-      <Field.Native
-        label="Major"
-        name="major"
-        path="meta.major"
-        type="checkbox"
-        data-test-id={"major-checkbox"}
-        labelPlacement="after"
-      />
+    <Form schema={Schema} className="form">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Field.String name={`names[${index}]`} label={`Name ${index + 1}`} />
+      ))}
     </Form>
   );
 }

@@ -10,7 +10,7 @@ export function useFields() {
    * @param name The name of the field.
    * @returns FieldMeta
    */
-  const getField = (name: string) => fields[name];
+  const getField = (name: string): FieldMeta | undefined => fields[name];
 
   /**
    * Check if a field exists.

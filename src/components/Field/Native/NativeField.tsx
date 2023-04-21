@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { HTMLProps, useMemo } from "react";
 
 import { FieldProps, FieldValue } from "../../../types/field";
+import { omitNonHtmlProps } from "../../../utils/field-props";
 import { ConformField } from "../../ConformField";
 
 type NativeFieldValueType = HTMLProps<HTMLInputElement>["value"] | boolean;
@@ -30,17 +31,7 @@ const NativeField = ConformField<NativeFieldValueType, NativeFieldProps>(
       }
     };
 
-    const fieldProps = useMemo(
-      () =>
-        _.omit(props, [
-          "hideLabel",
-          "hideRequired",
-          "labelRenderer",
-          "labelPlacement",
-          "path",
-        ]),
-      [props]
-    );
+    const fieldProps = useMemo(() => omitNonHtmlProps(props), [props]);
 
     return (
       <input
