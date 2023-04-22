@@ -1,7 +1,5 @@
 import { ReactNode } from "react";
 
-import { ValidationError } from "./validation";
-
 /**
  * The metadata of a field.
  * @property error The error message of the field.
@@ -10,9 +8,7 @@ import { ValidationError } from "./validation";
 export type FieldMeta = {
   type: string;
   name: string;
-  errors: ValidationError[] | null;
   touched: boolean;
-  noValidate: boolean;
 };
 
 /**
@@ -51,6 +47,8 @@ export type FieldProps<FieldValueType> = {
   hideLabel?: boolean;
   labelPlacement?: "before" | "after";
   "data-test-id"?: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 } & FieldValidationProps;
 
 /**
@@ -72,9 +70,11 @@ export type FieldValidationProps = {
  */
 export type EditableFieldProps<FieldValueType, CustomFieldProps> = Omit<
   FieldProps<FieldValueType>,
-  "onChange" | "value"
+  "value" | "onChange"
 > &
-  CustomFieldProps;
+  CustomFieldProps & {
+    onChange?: (value: FieldValue<FieldValueType>) => void;
+  };
 
 /**
  * A field component is a function that takes the props and meta and returns a JSX element.

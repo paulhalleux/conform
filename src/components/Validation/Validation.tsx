@@ -1,27 +1,27 @@
 import React from "react";
 
-import { FieldMeta } from "../../types/field";
+import { FieldValidationResult } from "../../types/validation";
 
 type ValidationProps = {
-  field?: FieldMeta;
+  fieldValidation: FieldValidationResult;
   singleError?: boolean;
   errorRenderer?: (error: string) => React.ReactNode;
 };
 
 export function Validation({
-  field,
+  fieldValidation,
   singleError,
   errorRenderer,
 }: ValidationProps) {
-  if (!field?.errors) return null;
+  if (fieldValidation.success || !fieldValidation.errors) return null;
 
   if (singleError) {
     return (
       <div className="conform-field-validation">
         <div className="conform-field-validation-error">
           {errorRenderer
-            ? errorRenderer(field.errors[0].message)
-            : field.errors[0].message}
+            ? errorRenderer(fieldValidation.errors[0].message)
+            : fieldValidation.errors[0].message}
         </div>
       </div>
     );
@@ -29,9 +29,9 @@ export function Validation({
 
   return (
     <div className="conform-field-validation">
-      {field.errors.map((error) => (
+      {fieldValidation.errors.map((error) => (
         <div
-          key={`${error.path}_${error.message}`}
+          key={`${error.type}_${error.message}`}
           className="conform-field-validation-error"
         >
           {errorRenderer ? errorRenderer(error.message) : error.message}

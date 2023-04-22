@@ -1,5 +1,6 @@
 import React from "react";
 
+import { omitNonHtmlProps } from "../../../utils/field-props";
 import { ConformField } from "../../ConformField";
 
 /**
@@ -10,12 +11,14 @@ const DateField = ConformField<string>(({ value, onChange, ...props }) => {
     onChange(event.target.value);
   };
 
+  const fieldProps = omitNonHtmlProps(props);
+
   return (
     <input
       type="date"
       onChange={onFieldChange}
       value={value ?? ""}
-      {...props}
+      {...fieldProps}
     />
   );
 });

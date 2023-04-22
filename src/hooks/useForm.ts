@@ -17,10 +17,17 @@ export function useForm<FormValueType>(props: FormProps<FormValueType>) {
     onValid,
   } = props;
 
-  const fields = useFields();
-  const validation = useFormValidation(fields, schema, onValid, onInvalid);
   const [value, setValue] = useState<Partial<FormValueType>>(
     defaultValue ? { ...defaultValue } : {}
+  );
+
+  const fields = useFields();
+  const validation = useFormValidation(
+    fields,
+    value,
+    schema,
+    onValid,
+    onInvalid
   );
 
   /**
@@ -33,7 +40,7 @@ export function useForm<FormValueType>(props: FormProps<FormValueType>) {
       const newForm = { ...value, ...partial };
       setValue(newForm);
       onFieldChange?.(newForm);
-      validation.validate(newForm);
+      validation.validate();
     },
     [onFieldChange, validation, value]
   );
@@ -72,5 +79,6 @@ export function useForm<FormValueType>(props: FormProps<FormValueType>) {
     fields,
     schema,
     validation,
+    hideErrorMessages: props.hideErrorMessages,
   };
 }

@@ -10,7 +10,7 @@ import { z } from "zod";
 import { FormProvider } from "../../contexts/FormContext";
 import { useForm } from "../../hooks/useForm";
 import { FormRef } from "../../types/form";
-import { ValidationError } from "../../types/validation";
+import { FormValidationErrors } from "../../types/validation";
 
 /**
  * The props of the form component.
@@ -26,9 +26,10 @@ export type FormProps<FormValueType> = PropsWithChildren<{
   ) => void;
   onChange?: (value: Partial<FormValueType>) => void;
   onValid?: () => void;
-  onInvalid?: (errors: ValidationError[]) => void;
+  onInvalid?: (errors: FormValidationErrors) => void;
   defaultValue?: Partial<FormValueType>;
   schema?: z.ZodSchema<FormValueType>;
+  hideErrorMessages?: boolean;
   className?: string;
 }>;
 

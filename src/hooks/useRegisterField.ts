@@ -23,9 +23,7 @@ export function useRegisterField<FieldValueType, CustomFieldProps>(
       formContext.fields.registerField(props.name, {
         name: props.name,
         touched: false,
-        errors: null,
         type: fieldType,
-        noValidate: props.noValidate ?? false,
       }),
     [fieldType, props.name, props.noValidate]
   );

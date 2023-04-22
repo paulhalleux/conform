@@ -21,6 +21,7 @@
   font-size: 12px;
   margin-bottom: 2px;
   font-weight: 500;
+  user-select: none;
 }
 
 .conform-field-input-wrapper input[type='text'] {

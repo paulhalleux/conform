@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import React, { PropsWithChildren, useMemo } from "react";
 
+import { useFormContext } from "../../contexts/FormContext";
 import { useRegisterField } from "../../hooks/useRegisterField";
 import {
   ConformFieldOptions,
@@ -27,7 +28,9 @@ const ConformField =
       hideError,
       errorRenderer,
     } = props;
+    const { hideErrorMessages, validation } = useFormContext();
     const { fieldProps, field } = useRegisterField(props, typeof Component);
+    const fieldValidation = validation.getFieldValidation(props.name);
 
     const showLabel = useMemo(
       () => props.label && !props.hideLabel && !options?.hideDefaultLabel,
@@ -56,16 +59,21 @@ const ConformField =
       [props]
     );
 
+    const showValidation = useMemo(() => {
+      if (hideError) return false;
+      if (hideErrorMessages) return false;
+      if (!field?.touched) return false;
+      return !fieldValidation?.success;
+    }, [field, fieldValidation, hideError, hideErrorMessages]);
+
     return (
-      <WrapperComponent
-        className={field?.errors?.[0]?.message ? "error" : undefined}
-      >
+      <WrapperComponent className={showValidation ? "error" : undefined}>
         {labelPlacement === "before" && LabelComponent}
         <div className="conform-field-input-wrapper">{FieldComponent}</div>
         {labelPlacement === "after" && LabelComponent}
-        {!hideError && (
+        {showValidation && (
           <Validation
-            field={field}
+            fieldValidation={fieldValidation}
             singleError={singleError}
             errorRenderer={errorRenderer}
           />

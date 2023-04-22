@@ -17,7 +17,7 @@ export function useFieldValue<FieldValueType, CustomFieldProps>(
   const onFieldChange = (value: FieldValue<FieldValueType>) => {
     const newValue = _.set(formContext.value, props.name, value);
     formContext.onChange(newValue);
-    formContext.fields.setTouched(props.name, true);
+    props.onChange?.(value);
   };
 
   return {

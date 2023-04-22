@@ -1,64 +1,76 @@
 import { useState } from "react";
 import z from "zod";
 
-import { ValidationError } from "../types/validation";
-import { mapZodPathToJsonPath } from "../utils/validation";
+import {
+  FieldValidationResult,
+  FormValidationErrors,
+  FormValidationResult,
+} from "../types/validation";
+import { validateForm } from "../utils/validation";
 import { useFields } from "./useFields";
 
 /**
  * A hook that provides a form state and methods to update the form validation.
  * @param fields The fields that are used to validate the form.
+ * @param value The value of the form.
  * @param schema The schema that is used to validate the form.
  * @param onValid A callback that is called when the form is valid.
  * @param onInvalid A callback that is called when the form is invalid.
  */
 export function useFormValidation<FormValueType>(
   fields: ReturnType<typeof useFields>,
+  value: Partial<FormValueType>,
   schema?: z.ZodSchema<FormValueType>,
   onValid?: () => void,
-  onInvalid?: (errors: ValidationError[]) => void
+  onInvalid?: (errors: FormValidationErrors) => void
 ) {
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [validationState, setValidationState] = useState<FormValidationResult>({
+    success: true,
+    errors: null,
+  });
 
-  const validate = (value: Partial<FormValueType>) => {
-    if (!schema) return;
+  /**
+   * Validates a form.
+   */
+  const validate = () => {
+    const result = validateForm(schema, value, fields.fields);
+    setValidationState(result);
 
-    const result = schema.safeParse(value);
     if (result.success) {
-      setErrors([]);
       onValid?.();
-
-      Object.keys(fields.fields).forEach((fieldName) =>
-        fields.updateField(fieldName, { errors: null })
-      );
-
-      return;
+    } else {
+      onInvalid?.(result.errors || {});
     }
 
-    const mappedErrors = result.error.issues.map((issue) => ({
-      path: mapZodPathToJsonPath(issue.path),
-      message: issue.message,
-    }));
-
-    Object.keys(fields.fields).forEach((fieldName) => {
-      const fieldErrors = mappedErrors.filter(
-        (error) => error.path === fieldName
-      );
-
-      if (fieldErrors.length > 0 && !fields.fields[fieldName].noValidate) {
-        fields.updateField(fieldName, { errors: fieldErrors });
-        return;
-      }
-
-      fields.updateField(fieldName, { errors: null });
-    });
-
-    setErrors(mappedErrors);
-    onInvalid?.(mappedErrors);
+    return result.success;
   };
 
+  /**
+   * Resets the form validation.
+   * @returns void
+   */
+  const resetValidation = () => {
+    setValidationState({
+      success: true,
+      errors: null,
+    });
+  };
+
+  /**
+   * Gets the validation result of a field.
+   * @param name The name of the field.
+   * @returns The validation result of the field.
+   */
+  const getFieldValidation = (name: string): FieldValidationResult =>
+    validationState.errors?.[name] || {
+      success: true,
+      errors: null,
+    };
+
   return {
-    errors,
     validate,
+    validationState,
+    resetValidation,
+    getFieldValidation,
   };
 }

@@ -14,7 +14,12 @@ export function App() {
   return (
     <Form schema={Schema} className="form">
       {Array.from({ length: 5 }).map((_, index) => (
-        <Field.String name={`names[${index}]`} label={`Name ${index + 1}`} />
+        <Field.String
+          key={`name-${index}`}
+          name={`names[${index}]`}
+          label={`Name ${index + 1}`}
+          singleError
+        />
       ))}
     </Form>
   );

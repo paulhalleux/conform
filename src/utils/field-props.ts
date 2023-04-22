@@ -32,5 +32,6 @@ export function omitNonHtmlProps<FieldValueType, CustomFieldProps>(
     "hideRequired",
     "labelRenderer",
     "labelPlacement",
+    "singleError",
   ]);
 }
