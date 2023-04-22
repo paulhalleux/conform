@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { FieldValidationResult, ValidationError } from "./validation";
+
 /**
  * The metadata of a field.
  * @property error The error message of the field.
@@ -52,6 +54,16 @@ export type FieldProps<FieldValueType> = {
 } & FieldValidationProps;
 
 /**
+ * The function that is called to render the error.
+ * @param error The error that should be rendered.
+ * @param errors The errors that are present on the field.
+ */
+export type ErrorRendererFn = (
+  error: ValidationError,
+  errors: ValidationError[]
+) => ReactNode;
+
+/**
  * The props that are used to define the validation rules of a field.
  * @property singleError Whether only a single error should be shown.
  * @property errorRenderer The function that is called to render the error.
@@ -59,7 +71,7 @@ export type FieldProps<FieldValueType> = {
  */
 export type FieldValidationProps = {
   singleError?: boolean;
-  errorRenderer?: (error: string) => ReactNode;
+  errorRenderer?: ErrorRendererFn;
   hideError?: boolean;
   noValidate?: boolean;
 };

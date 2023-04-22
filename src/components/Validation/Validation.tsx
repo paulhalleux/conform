@@ -1,13 +1,20 @@
 import React from "react";
 
+import { ErrorRendererFn } from "../../types/field";
 import { FieldValidationResult } from "../../types/validation";
 
 type ValidationProps = {
   fieldValidation: FieldValidationResult;
   singleError?: boolean;
-  errorRenderer?: (error: string) => React.ReactNode;
+  errorRenderer?: ErrorRendererFn;
 };
 
+/**
+ * Validation component to render the validation errors.
+ * @param fieldValidation The field validation result
+ * @param singleError If true, only the first error will be rendered
+ * @param errorRenderer A function to render the error
+ */
 export function Validation({
   fieldValidation,
   singleError,
@@ -20,7 +27,7 @@ export function Validation({
       <div className="conform-field-validation">
         <div className="conform-field-validation-error">
           {errorRenderer
-            ? errorRenderer(fieldValidation.errors[0].message)
+            ? errorRenderer(fieldValidation.errors[0], fieldValidation.errors)
             : fieldValidation.errors[0].message}
         </div>
       </div>
@@ -34,7 +41,9 @@ export function Validation({
           key={`${error.type}_${error.message}`}
           className="conform-field-validation-error"
         >
-          {errorRenderer ? errorRenderer(error.message) : error.message}
+          {errorRenderer
+            ? errorRenderer(error, fieldValidation.errors || [])
+            : error.message}
         </div>
       ))}
     </div>

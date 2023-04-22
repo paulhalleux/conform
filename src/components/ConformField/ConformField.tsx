@@ -61,17 +61,16 @@ const ConformField =
 
     const showValidation = useMemo(() => {
       if (hideError) return false;
-      if (hideErrorMessages) return false;
       if (!field?.touched) return false;
       return !fieldValidation?.success;
-    }, [field, fieldValidation, hideError, hideErrorMessages]);
+    }, [field, fieldValidation, hideError]);
 
     return (
       <WrapperComponent className={showValidation ? "error" : undefined}>
         {labelPlacement === "before" && LabelComponent}
         <div className="conform-field-input-wrapper">{FieldComponent}</div>
         {labelPlacement === "after" && LabelComponent}
-        {showValidation && (
+        {showValidation && !hideErrorMessages && (
           <Validation
             fieldValidation={fieldValidation}
             singleError={singleError}

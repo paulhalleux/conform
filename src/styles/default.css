@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  isolation: isolate;
 }
 
 .conform-field-wrapper.error .conform-field-input-wrapper input[type='text'] {
@@ -11,10 +12,16 @@
   transition: none;
 }
 
-.conform-field-validation-error {
-  font-size: 12px;
+.conform-field-validation {
+  font-size: 10px;
   color: #bd0000;
-  margin-top: 4px;
+  margin-top: -4px;
+  background: rgba(253, 242, 242, 0.76);
+  border-radius: 0 0 4px 4px;
+  padding: 8px 6px 4px 6px;
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid rgba(189, 0, 0, 0.17);
 }
 
 .conform-field-label {
@@ -22,6 +29,10 @@
   margin-bottom: 2px;
   font-weight: 500;
   user-select: none;
+}
+
+.conform-field-input-wrapper {
+  z-index: 1;
 }
 
 .conform-field-input-wrapper input[type='text'] {

@@ -18,7 +18,6 @@ export function App() {
           key={`name-${index}`}
           name={`names[${index}]`}
           label={`Name ${index + 1}`}
-          singleError
         />
       ))}
     </Form>
