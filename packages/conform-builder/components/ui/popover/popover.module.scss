@@ -1,0 +1,50 @@
+.popover {
+  --content-offset: 5px;
+  position: relative;
+  width: max-content;
+}
+
+.popover__trigger {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.popover__container {
+  position: absolute;
+  z-index: 100;
+}
+
+// top & bottom
+.popover--pos-bottom-left,
+.popover--pos-top-left {
+  left: 0;
+}
+
+.popover--pos-bottom-center,
+.popover--pos-top-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.popover--pos-bottom-right,
+.popover--pos-top-right {
+  right: 0;
+}
+
+// left & right
+.popover--pos-right-top,
+.popover--pos-left-top {
+  top: 0;
+}
+
+.popover--pos-right-center,
+.popover--pos-left-center {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.popover--pos-right-bottom,
+.popover--pos-left-bottom {
+  bottom: 0;
+}

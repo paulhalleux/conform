@@ -1,0 +1,17 @@
+@import "theme";
+@import "functions";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: c(text);
+}
+
+body {
+  background-color: c(background);
+}
+
+.no-transition * {
+  transition: none !important;
+}

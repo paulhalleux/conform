@@ -1,0 +1,21 @@
+.theme-switcher {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
+
+  background: c(background-secondary);
+
+  &:hover {
+    cursor: pointer;
+    background: c(background-hover);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
