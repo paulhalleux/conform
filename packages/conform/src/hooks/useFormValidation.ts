@@ -5,7 +5,8 @@ import {
   FieldValidationResult,
   FormValidationErrors,
   FormValidationResult,
-} from "../types/validation";
+  ValidateOptions,
+} from "../types";
 import { validateForm } from "../utils/validation";
 import { useFields } from "./useFields";
 
@@ -16,13 +17,15 @@ import { useFields } from "./useFields";
  * @param schema The schema that is used to validate the form.
  * @param onValid A callback that is called when the form is valid.
  * @param onInvalid A callback that is called when the form is invalid.
+ * @param strategy The strategy that is used to validate the form.
  */
 export function useFormValidation<FormValueType>(
   fields: ReturnType<typeof useFields>,
   value: Partial<FormValueType>,
   schema?: z.ZodSchema<FormValueType>,
   onValid?: () => void,
-  onInvalid?: (errors: FormValidationErrors) => void
+  onInvalid?: (errors: FormValidationErrors) => void,
+  strategy?: "blur" | "submit" | "both"
 ) {
   const [validationState, setValidationState] = useState<FormValidationResult>({
     success: true,
@@ -32,8 +35,12 @@ export function useFormValidation<FormValueType>(
   /**
    * Validates a form.
    */
-  const validate = () => {
+  const validate = (options?: ValidateOptions) => {
     const result = validateForm(schema, value, fields.fields);
+    if (options?.force) {
+      fields.touchAll(true);
+    }
+
     setValidationState(result);
 
     if (result.success) {
@@ -72,5 +79,6 @@ export function useFormValidation<FormValueType>(
     validationState,
     resetValidation,
     getFieldValidation,
+    strategy,
   };
 }

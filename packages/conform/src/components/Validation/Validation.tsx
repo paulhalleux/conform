@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ErrorRendererFn } from "../../types/field";
-import { FieldValidationResult } from "../../types/validation";
+import { ErrorRendererFn } from "../../types";
+import { FieldValidationResult } from "../../types";
 
 type ValidationProps = {
   fieldValidation: FieldValidationResult;

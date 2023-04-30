@@ -1,3 +1,5 @@
+"use client";
+
 import { LaptopIcon, Moon, MoonIcon, Sun, SunIcon } from "lucide-react";
 import { useRef } from "react";
 
@@ -13,9 +15,9 @@ export function ThemeSwitcher() {
   const { theme, setTheme, currentTheme } = useTheme();
 
   const Trigger = (
-    <button className={styles["theme-switcher"]}>
+    <div className={styles["theme-switcher"]}>
       {currentTheme === "dark" ? <Moon size={14} /> : <Sun size={14} />}
-    </button>
+    </div>
   );
 
   const onThemeChanged = (theme: ThemeType) => {

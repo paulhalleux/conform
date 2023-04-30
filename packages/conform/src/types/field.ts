@@ -77,7 +77,7 @@ export type FieldValidationProps = {
 };
 
 /**
- * The props that are passed to a field and editable by the user.
+ * The props that are passed to a field and editable by the users.
  * @template FieldValueType The type of the field value.
  */
 export type EditableFieldProps<FieldValueType, CustomFieldProps> = Omit<

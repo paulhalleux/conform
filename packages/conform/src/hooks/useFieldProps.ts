@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { useFormContext } from "../contexts/FormContext";
-import { EditableFieldProps } from "../types/field";
+import { EditableFieldProps } from "../types";
 import { buildFieldProps } from "../utils/field-props";
 import { useFieldValue } from "./useFieldValue";
 
@@ -18,7 +18,14 @@ export function useFieldProps<FieldValueType, CustomFieldProps>(
 
   const onBlur = () => {
     formContext.fields.setTouched(props.name, true);
-    formContext.validation.validate();
+
+    if (
+      formContext.validation.strategy === "blur" ||
+      formContext.validation.strategy === "both"
+    ) {
+      formContext.validation.validate();
+    }
+
     props.onBlur?.();
   };
 

@@ -1,10 +1,7 @@
 import { ZodSchema } from "zod";
 
-import { FieldMeta } from "../types/field";
-import {
-  FormValidationErrors,
-  FormValidationResult,
-} from "../types/validation";
+import { FieldMeta } from "../types";
+import { FormValidationErrors, FormValidationResult } from "../types";
 
 /**
  * Maps a Zod error path to a JSON path
@@ -77,7 +74,7 @@ export function validateForm<FormValueType>(
   });
 
   return {
-    success: false,
+    success: result.success,
     errors,
   };
 }

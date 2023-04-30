@@ -22,9 +22,11 @@ export function Navigation({
   size = "large",
 }: NavigationProps) {
   const pathname = usePathname();
-  const activeLink = links.find(
-    ({ href }) => href.toLowerCase() === pathname.toLowerCase()
+  const activeLinks = links.filter(({ href }) =>
+    pathname.toLowerCase().startsWith(href.toLowerCase())
   );
+
+  const activeLink = activeLinks[activeLinks.length - 1];
 
   return (
     <nav

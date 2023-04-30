@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { EditableFieldProps } from "../types/field";
+import { EditableFieldProps } from "../types";
 
 /**
  * Builds the field props.

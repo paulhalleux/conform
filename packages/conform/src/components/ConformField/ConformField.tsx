@@ -8,7 +8,7 @@ import {
   ConformFieldOptions,
   EditableFieldProps,
   FieldComponent,
-} from "../../types/field";
+} from "../../types";
 import { Validation } from "../Validation/Validation";
 
 /**
@@ -32,10 +32,7 @@ const ConformField =
     const { fieldProps, field } = useRegisterField(props, typeof Component);
     const fieldValidation = validation.getFieldValidation(props.name);
 
-    const showLabel = useMemo(
-      () => props.label && !props.hideLabel && !options?.hideDefaultLabel,
-      [props]
-    );
+    const showLabel = useMemo(() => !options?.hideDefaultLabel, [props]);
 
     const WrapperComponent = !showLabel ? React.Fragment : Wrapper;
     const FieldComponent = useMemo(

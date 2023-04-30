@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { useFormContext } from "../contexts/FormContext";
-import { EditableFieldProps, FieldValue } from "../types/field";
+import { EditableFieldProps, FieldValue } from "../types";
 
 /**
  * Returns the field value and the function to change the field value.

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { FieldMeta } from "../types/field";
+import { FieldMeta } from "../types";
 
 export function useFields() {
   const [fields, setFields] = useState<Record<string, FieldMeta>>({});

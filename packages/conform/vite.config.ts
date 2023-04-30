@@ -5,6 +5,9 @@ import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 import eslint from "vite-plugin-eslint";
 
+// @ts-ignore
+import * as packageJson from "./package.json";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -18,7 +21,10 @@ export default defineConfig({
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "conform",
       formats: ["es", "umd"],
-      fileName: (format) => `conform.${format}.js`,
+      fileName: (format) => `index.${format}.js`,
+    },
+    rollupOptions: {
+      external: [...Object.keys(packageJson.peerDependencies)],
     },
   },
 });

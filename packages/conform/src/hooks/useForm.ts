@@ -27,7 +27,8 @@ export function useForm<FormValueType>(props: FormProps<FormValueType>) {
     value,
     schema,
     onValid,
-    onInvalid
+    onInvalid,
+    props.validationStrategy
   );
 
   /**

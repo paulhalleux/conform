@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 import { useFormContext } from "../contexts/FormContext";
-import { EditableFieldProps } from "../types/field";
+import { EditableFieldProps } from "../types";
 import { useFieldProps } from "./useFieldProps";
 
 /**

@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  username       String
+  email          String       @unique
+  emailVerified  DateTime?
+  password       String
+  profilePicture String?
+  createdAt      DateTime     @default(now()) @map(name: "created_at")
+  updatedAt      DateTime     @default(now()) @map(name: "updated_at")
+  preferences    Preferences?
+
+  @@map(name: "users")
+}
+
+model Preferences {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  theme     String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "preferences")
+}

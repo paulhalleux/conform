@@ -1,7 +1,6 @@
-import _ from "lodash";
 import React, { HTMLProps, useMemo } from "react";
 
-import { FieldProps, FieldValue } from "../../../types/field";
+import { FieldProps, FieldValue } from "../../../types";
 import { omitNonHtmlProps } from "../../../utils/field-props";
 import { ConformField } from "../../ConformField";
 

@@ -38,3 +38,8 @@ export type FormValidationResult = {
 export type FormValidationErrors = {
   [key: string]: FieldValidationResult;
 };
+
+/**
+ * The options for validating a form.
+ */
+export type ValidateOptions = { force: boolean };
