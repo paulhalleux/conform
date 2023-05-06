@@ -1,7 +1,0 @@
-@function c($color, $opacity: null) {
-  @if $opacity == null {
-    @return rgb(var(--c-#{$color}));
-  }
-
-  @return rgba(var(--c-#{$color}), $opacity);
-}
